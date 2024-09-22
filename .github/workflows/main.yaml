@@ -33,9 +33,14 @@ jobs:
       SONAR_PROJECT_KEY: ${{ secrets.SNOAR_PROJECT_KEY }}
       G_TOKEN: ${{ secrets.G_TOKEN}}
 
+  docker-scan:
+    name: Scan Trivy
+    uses: ./../.github/workflows/docker-scan.yaml
+    needs: [build]
+
   docker-build:
-    name: Docker Build
-    needs: [test, code-scan]
+    name: Docker Build And Push
+    needs: [test, code-scan, docker-scan]
     uses: ./.github/workflows/docker-build.yaml
     secrets:
       DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
