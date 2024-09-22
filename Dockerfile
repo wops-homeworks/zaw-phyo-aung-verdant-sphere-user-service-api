@@ -10,17 +10,7 @@ COPY package.json package-lock.json ./
 RUN npm install
 
 # Copy the rest of the application code
-COPY .env.example ./.env
-
-COPY /src /app/src
-
-COPY /test /app/test
-
-COPY /node_modules /app/node_modules
-
-COPY tsconfig.build.json /app/tsconfig.build.json
-
-COPY tsconfig.json /app/tsconfig.json
+COPY . .
 
 # Build the NestJS application
 RUN npm run build
@@ -37,7 +27,6 @@ RUN addgroup -S dockeruser && adduser -S -G dockeruser dockeruser
 COPY --chown=dockeruser:dockeruser --from=builder /app/node_modules /app/node_modules
 COPY --chown=dockeruser:dockeruser --from=builder /app/dist /app/dist
 COPY --chown=dockeruser:dockeruser --from=builder /app/package.json /app
-COPY --chown=dockeruser:dockeruser --from=builder /app/package-lock.json /app
 
 # Expose the application port
 EXPOSE 3000

@@ -1,0 +1,34 @@
+name: "Main Work Flow"
+
+on:
+  pull_request:
+    branches:
+    - main
+  push:
+    branches:
+    - main
+
+jobs:
+  build:
+    name: Build the app
+    uses: ./.github/workflows/build.yaml
+    with:
+      node_version: 18
+
+  test:
+    name: Test the app
+    needs: [build]
+    uses: ./.github/workflows/test.yaml
+    with:
+      node_version: 18
+
+  code-scan:
+    name: Scan The app
+    needs: [build]
+    uses: ./.github/workflows/code-scan.yaml
+
+  docker-build:
+    name: Docker Build
+    needs: [test, codescan]
+    uses: ./.github/workflows/docker-build.yaml
+
