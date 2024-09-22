@@ -24,7 +24,9 @@ jobs:
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
 
-    - name: Build Docker Image
+    - name: Build Docker Image And Push
       run: |
-        docker build -t verdant-sphere-user-service-api:latest .
+        docker build -t ${{ secrets.DOCKER_USERNAME }}/verdant-sphere-user-service-api:latest .
+        docker push ${{ secrets.DOCKER_USERNAME }}/verdant-sphere-user-service-api:latest
+
 
