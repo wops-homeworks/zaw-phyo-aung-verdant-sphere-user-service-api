@@ -36,7 +36,7 @@ jobs:
   docker-scan:
     name: Scan Trivy
     needs: [build]
-    uses: ./.github/workflows/docker.yaml
+    uses: ./.github/workflows/docker-scan.yaml
 
   docker-build:
     name: Docker Build And Push
