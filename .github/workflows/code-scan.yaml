@@ -20,8 +20,40 @@ jobs:
     - name: Checkout Code
       uses: actions/checkout@v3
 
+    - name: Restore Node module
+      id: node-module-cache
+      uses: actions/cache@v4.0.2
+      with:
+        key: ${{ github.sha }}-node-modules
+        path: ./node_modules
+        restore-key: ${{ github.sha }}-node-modules
+
+    - name: Cache Package Manager
+      if: steps.node-module-cache.outputs.cache-hit != 'true'
+      id: package-manager-restore
+      uses: actions/cache@v4.0.2
+      with:
+        key: ${{ github.sha }}-package-manager
+        path: ~/.npm
+        restore-key: ${{ github.sha }}-package-manager-restore
+
+    - name: Install Packeage Manager
+      if: steps.package-manager-restore.outputs.cache-hit != 'true' && steps.node-module-cache.outputs.cache-hit != 'true'
+      uses: actions/setup-node@v2
+      with:
+        node-version: ${{ inputs.node_version }}
+
+    - name: Install Dependencies
+      if: steps.node-module-cache.outputs.cache-hit != 'true'
+      run: npm install
+
+    - name: Build The app
+      run: npm run build
+
     - name: Install SonarCloud Scanner
       uses: sonarsource/sonarqube-scan-action@v2.3.0
-      with:
-        args: >
-          sonar.projectKey=${{ secrets.SONAR_PROJECT_KEY }} sonar.organization=${{ secrets.SONAR_ORG }} sonar.host.url=${{ secrets.SONAR_HOST_URL }} sonar.login=${{ secrets.SONAR_TOKEN }} #magic___^_^___line #magic___^_^___line
+      env:
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        SONAR_HOST_URL: ${{ vars.SONAR_HOST_URL }}
+        SONAR_ORG: ${{ secrets.SONAR_ORGANIZATION }}
+        SONAR_PROJECT_KEY: ${{ secrets.SNOAR_PROJECT_KEY }}
