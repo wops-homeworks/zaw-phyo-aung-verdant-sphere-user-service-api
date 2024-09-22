@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     services:
       mongodb:
-        image: mongo:4.4.6
+        image: mongo:latest
         env:
           MONGO_INITDB_ROOT_USERNAME: root
           MONGO_INITDB_ROOT_PASSWORD: example
@@ -54,5 +54,5 @@ jobs:
       run: cp .env.example .env
 
     - name: Test the app
-      run: npm run test
+      run: npm run test:e2e
 
