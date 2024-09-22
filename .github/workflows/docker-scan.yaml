@@ -26,13 +26,14 @@ jobs:
       with:
         image-ref: 'verdant-sphere-user-service-api:${{ github.sha }}'
         format: 'sarif'
-        output: results.sarif
+        output: 'trivy-results.sarif'
+        severity: 'CRITICAL,HIGH'
 
     - name: Debug SARIF file
-      run: cat results.sarif
+      run: cat trivy-results.sarif
 
     - name: Upload Trivy scan results to GitHub Security tab
       uses: github/codeql-action/upload-sarif@v3
       if: always()
       with:
-        sarif_file: results.sarif
+        sarif_file: 'trivy-results.sarif'
