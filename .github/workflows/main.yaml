@@ -26,6 +26,9 @@ jobs:
     name: Scan The app
     needs: [build]
     uses: ./.github/workflows/code-scan.yaml
+    secrets:
+      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
 
   docker-build:
     name: Docker Build
