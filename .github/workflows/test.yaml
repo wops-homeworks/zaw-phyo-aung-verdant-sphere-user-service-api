@@ -29,7 +29,7 @@ jobs:
       with:
         key: ${{ github.sha }}-node-modules
         path: ./node_modules
-        restore-key: ${{ github.sha }}-node-modules
+        restore-keys: ${{ github.sha }}-node-modules
 
     - name: Cache Package Manager
       if: steps.node-module-cache.outputs.cache-hit != 'true'
@@ -38,7 +38,7 @@ jobs:
       with:
         key: ${{ github.sha }}-package-manager
         path: ~/.npm
-        restore-key: ${{ github.sha }}-package-manager-restore
+        restore-keys: ${{ github.sha }}-package-manager-restore
 
     - name: Install Packeage Manager
       if: steps.package-manager-restore.outputs.cache-hit != 'true' && steps.node-module-cache.outputs.cache-hit != 'true'
@@ -49,6 +49,9 @@ jobs:
     - name: Install Dependencies
       if: steps.node-module-cache.outputs.cache-hit != 'true'
       run: npm install
+
+    - name: Set up Env File
+      run: cp .env.example .env
 
     - name: Test the app
       run: npm run test

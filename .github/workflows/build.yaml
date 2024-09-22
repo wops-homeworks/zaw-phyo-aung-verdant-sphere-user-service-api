@@ -25,7 +25,7 @@ jobs:
       with:
         path: ~/.npm
         key: ${{ github.sha }}-package-manager
-        restore-key: ${{ github.sha }}-package-manager-restore
+        restore-keys: ${{ github.sha }}-package-manager-restore
 
     - name: Install Dependencies
       run: npm install
@@ -38,4 +38,4 @@ jobs:
       with:
         path: ./node_modules
         key: ${{ github.sha }}-node-modules
-        restore-key: ${{ github.sha }}-node-modules
+        restore-keys: ${{ github.sha }}-node-modules
