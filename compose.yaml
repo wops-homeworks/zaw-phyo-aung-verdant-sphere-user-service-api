@@ -1,0 +1,38 @@
+version: '3.9'
+
+services:
+  # Nest_APP
+  app:
+    container_name: my_nest_docker
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      DATABASE_URI: mongodb://root:example@mongo:27017/test?authSource=admin 
+    ports:
+      - "3000:3000"
+    networks:
+      - app-network
+    depends_on:
+      - mongo
+
+  #Mongo DB Service
+  mongo:
+    image: mongo:latest
+    ports:
+      - "27017"
+    volumes:
+      - mongo-data:/var/lib/mongo-db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+    networks:
+      - app-network
+      
+# Networks
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  mongo-data:

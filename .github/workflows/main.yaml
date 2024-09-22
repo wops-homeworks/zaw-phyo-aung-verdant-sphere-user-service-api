@@ -1,0 +1,51 @@
+name: "Main Work Flow"
+
+on:
+  pull_request:
+    branches:
+    - main
+  push:
+    branches:
+    - main
+
+jobs:
+  build:
+    name: Build the app
+    uses: ./.github/workflows/build.yaml
+    with:
+      node_version: 18
+
+  test:
+    name: Test the app
+    needs: [build]
+    uses: ./.github/workflows/test.yaml
+    with:
+      node_version: 18
+
+  code-scan:
+    name: Scan The app
+    needs: [build]
+    uses: ./.github/workflows/code-scan.yaml
+    secrets:
+      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+      SONAR_ORG: ${{ secrets.SONAR_ORGANIZATION }}
+      SONAR_PROJECT_KEY: ${{ secrets.SNOAR_PROJECT_KEY }}
+      G_TOKEN: ${{ secrets.G_TOKEN}}
+
+  docker-scan:
+    name: Scan Trivy
+    needs: [build]
+    uses: ./.github/workflows/docker-scan.yaml
+    permissions:
+      # required for all workflows
+      security-events: write
+
+  docker-build:
+    name: Docker Build And Push
+    needs: [test, code-scan, docker-scan]
+    uses: ./.github/workflows/docker-build.yaml
+    secrets:
+      DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+      DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+

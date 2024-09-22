@@ -21,4 +21,8 @@ describe('AppController (e2e)', () => {
       .expect(200)
       .expect('Hello World!');
   });
+
+  afterAll(async () => {
+    await app.close(); // Shut down any servers you start in tests
+  });
 });

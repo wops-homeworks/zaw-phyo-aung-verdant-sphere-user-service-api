@@ -1,0 +1,41 @@
+name: "Build the app"
+
+on:
+  workflow_call:
+    inputs:
+      node_version:
+        required: true
+        type: string
+
+jobs:
+  build:
+    name: Build the app
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: ${{ inputs.node_version }}
+
+    - name: Cache Package Manager
+      uses: actions/cache@v4.0.2
+      with:
+        path: ~/.npm
+        key: ${{ github.sha }}-package-manager
+        restore-keys: ${{ github.sha }}-package-manager-restore
+
+    - name: Install Dependencies
+      run: npm install
+
+    - name: Build
+      run: npm run build
+
+    - name: Cache the node module
+      uses: actions/cache@v4.0.2
+      with:
+        path: ./node_modules
+        key: ${{ github.sha }}-node-modules
+        restore-keys: ${{ github.sha }}-node-modules

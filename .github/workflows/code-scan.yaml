@@ -1,0 +1,69 @@
+name: "Code scan the app"
+
+on:
+  workflow_call:
+    secrets:
+      SONAR_TOKEN:
+        required: true
+      SONAR_HOST_URL:
+        required: true
+      SONAR_PROJECT_KEY:
+        required: true
+      SONAR_ORG:
+        required: true
+      G_TOKEN:
+        required: true
+
+
+jobs:
+  code_scanning:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v3
+
+    - name: Restore Node module
+      id: node-module-cache
+      uses: actions/cache@v4.0.2
+      with:
+        key: ${{ github.sha }}-node-modules
+        path: ./node_modules
+        restore-keys: ${{ github.sha }}-node-modules
+
+    - name: Cache Package Manager
+      if: steps.node-module-cache.outputs.cache-hit != 'true'
+      id: package-manager-restore
+      uses: actions/cache@v4.0.2
+      with:
+        key: ${{ github.sha }}-package-manager
+        path: ~/.npm
+        restore-keys: ${{ github.sha }}-package-manager-restore
+
+    - name: Install Packeage Manager
+      if: steps.package-manager-restore.outputs.cache-hit != 'true' && steps.node-module-cache.outputs.cache-hit != 'true'
+      uses: actions/setup-node@v2
+      with:
+        node-version: ${{ inputs.node_version }}
+
+    - name: Install Dependencies
+      if: steps.node-module-cache.outputs.cache-hit != 'true'
+      run: npm install
+
+    - name: Build The app
+      run: npm run build
+
+    # - name: SonarCloud Scan
+    #   uses: SonarSource/sonarqube-scan-action@v2.3.0
+    #   env:
+    #     SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+    #     SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+    #     # SONAR_ORG: ${{ secrets.SONAR_ORG }}
+    #     # SONAR_PROJECT_KEY: ${{ secrets.SONAR_PROJECT_KEY }}
+    #   with:
+    #     args: >
+    #       -Dsonar.projectKey=${{ secrets.SONAR_PROJECT_KEY }} -Dsonar.organization=${{ secrets.SONAR_ORG }} -Dsonar.host.url=${{ secrets.SONAR_HOST_URL }} -Dsonar.login=${{ secrets.SONAR_TOKEN }}
+    - name: SonarCloud Scan
+      uses: SonarSource/sonarcloud-github-action@master
+      env:
+        GITHUB_TOKEN: ${{ secrets.G_TOKEN }} # Needed to get PR information, if any
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
