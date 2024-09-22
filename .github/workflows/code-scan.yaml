@@ -50,13 +50,18 @@ jobs:
     - name: Build The app
       run: npm run build
 
+    # - name: SonarCloud Scan
+    #   uses: SonarSource/sonarqube-scan-action@v2.3.0
+    #   env:
+    #     SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+    #     SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+    #     # SONAR_ORG: ${{ secrets.SONAR_ORG }}
+    #     # SONAR_PROJECT_KEY: ${{ secrets.SONAR_PROJECT_KEY }}
+    #   with:
+    #     args: >
+    #       -Dsonar.projectKey=${{ secrets.SONAR_PROJECT_KEY }} -Dsonar.organization=${{ secrets.SONAR_ORG }} -Dsonar.host.url=${{ secrets.SONAR_HOST_URL }} -Dsonar.login=${{ secrets.SONAR_TOKEN }}
     - name: SonarCloud Scan
-      uses: SonarSource/sonarqube-scan-action@v2.3.0
+      uses: SonarSource/sonarcloud-github-action@master
       env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Needed to get PR information, if any
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
-        # SONAR_ORG: ${{ secrets.SONAR_ORG }}
-        # SONAR_PROJECT_KEY: ${{ secrets.SONAR_PROJECT_KEY }}
-      with:
-        args: >
-          -Dsonar.projectKey=${{ secrets.SONAR_PROJECT_KEY }} -Dsonar.organization=${{ secrets.SONAR_ORG }} -Dsonar.host.url=${{ secrets.SONAR_HOST_URL }} -Dsonar.login=${{ secrets.SONAR_TOKEN }}
