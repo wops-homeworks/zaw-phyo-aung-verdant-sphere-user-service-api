@@ -31,6 +31,7 @@ jobs:
       SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
       SONAR_ORG: ${{ secrets.SONAR_ORGANIZATION }}
       SONAR_PROJECT_KEY: ${{ secrets.SNOAR_PROJECT_KEY }}
+      GITHUB_TOKEN: ${{ secrets.G_TOKEN}}
 
   docker-build:
     name: Docker Build
