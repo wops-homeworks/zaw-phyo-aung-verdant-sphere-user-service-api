@@ -6,6 +6,9 @@ on:
 jobs:
   docker-scan:
     runs-on: ubuntu-latest
+    permissions:
+      # required for all workflows
+      security-events: write
     steps:
     - name: Checkout
       uses: actions/checkout@v2
