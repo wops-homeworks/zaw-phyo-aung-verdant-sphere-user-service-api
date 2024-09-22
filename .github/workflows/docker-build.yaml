@@ -26,11 +26,11 @@ jobs:
 
     - name: Build Docker Image And Push
       run: |
-        docker build -t verdant-sphere-user-service-api .
+        docker build -t verdant-sphere-user-service-api:latest .
 
     - name: Tag Docker image
       run: |
-        docker tag verdant-sphere-user-service-api ${{ secrets.DOCKER_USERNAME }}/verdant-sphere-user-service-api:latest
+        docker tag verdant-sphere-user-service-api:latest ${{ secrets.DOCKER_USERNAME }}/verdant-sphere-user-service-api:latest
 
     - name: Push To Docker Hub
       run: |
