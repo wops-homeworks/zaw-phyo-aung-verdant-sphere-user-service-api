@@ -29,6 +29,6 @@ jobs:
 
   docker-build:
     name: Docker Build
-    needs: [test, codescan]
+    needs: [test, code-scan]
     uses: ./.github/workflows/docker-build.yaml
 
