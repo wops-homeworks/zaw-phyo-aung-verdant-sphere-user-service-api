@@ -15,4 +15,8 @@ export class AppService {
   getHealth(): Promise<HealthCheckResult> {
     return this.health.check([async () => this.mongoose.pingCheck('mongodb')]);
   }
+
+  getHello(): String {
+    return 'Hello World!';
+  }
 }

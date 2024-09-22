@@ -1,0 +1,35 @@
+name: "Trivy Container Scan"
+
+on:
+  workflow_call:
+
+jobs:
+  docker-scan:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+
+    - name: Build Docker Image
+      run: |
+        docker build -t verdant-sphere-user-service-api:${{ github.sha }} .
+
+    - name: Run Trivy vulnerability scanner
+      id: trivy-scan
+      uses: aquasecurity/trivy-action@0.20.0
+      with:
+        image-ref: 'verdant-sphere-user-service-api:${{ github.sha }}'
+        format: 'sarif'
+        exit-code: '1'
+        ignore-unfixed: true
+        vuln-type: 'os,library'
+        severity: 'CRITICAL,HIGH'
+
+    - name: Upload SARIF results to GitHub Security tab
+      if: steps.trivy-scan.outputs.exit-code != '0' # Only upload if there are vulnerabilities
+      uses: github/codeql-action/upload-sarif@v2
+      with:
+        sarif_file: ${{ steps.trivy-scan.outputs.sarif_file }}
