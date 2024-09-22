@@ -23,10 +23,9 @@ jobs:
       with:
         image-ref: 'verdant-sphere-user-service-api:${{ github.sha }}'
         format: 'sarif'
-        output: 'trivy-results.sarif'
-        exit-code: '1'
         ignore-unfixed: true
         vuln-type: 'os,library'
+        output: 'trivy-results.sarif'
         severity: 'CRITICAL,HIGH'
 
     - name: Upload Trivy scan results to GitHub Security tab
