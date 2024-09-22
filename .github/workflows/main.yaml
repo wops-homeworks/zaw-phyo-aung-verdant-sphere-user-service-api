@@ -34,4 +34,7 @@ jobs:
     name: Docker Build
     needs: [test, code-scan]
     uses: ./.github/workflows/docker-build.yaml
+    secrets:
+      DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+      DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
 
