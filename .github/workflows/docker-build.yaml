@@ -30,10 +30,10 @@ jobs:
 
     - name: Tag Docker image
       run: |
-        docker tag verdant-sphere-user-service-api ${{ secrets.DOCKERHUB_USERNAME }}/laravel-app:verdant-sphere-user-service-api:latest
+        docker tag verdant-sphere-user-service-api ${{ secrets.DOCKERHUB_USERNAME }}/verdant-sphere-user-service-api:latest
 
     - name: Push To Docker Hub
       run: |
-        docker push ${{ secrets.DOCKERHUB_USERNAME }}/laravel-app:verdant-sphere-user-service-api:latest
+        docker push ${{ secrets.DOCKERHUB_USERNAME }}/verdant-sphere-user-service-api:latest
 
 
