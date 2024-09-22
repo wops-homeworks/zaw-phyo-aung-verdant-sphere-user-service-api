@@ -11,7 +11,7 @@ on:
         required: true
       SONAR_ORG:
         required: true
-      GITHUB_TOKEN:
+      G_TOKEN:
         required: true
 
 
@@ -65,5 +65,5 @@ jobs:
     - name: SonarCloud Scan
       uses: SonarSource/sonarcloud-github-action@master
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Needed to get PR information, if any
+        GITHUB_TOKEN: ${{ secrets.G_TOKEN }} # Needed to get PR information, if any
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
