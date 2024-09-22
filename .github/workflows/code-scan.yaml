@@ -7,6 +7,10 @@ on:
         required: true
       SONAR_HOST_URL:
         required: true
+      SONAR_PROJECT_KEY:
+        required: true
+      SONAR_ORG:
+        required: true
 
 
 jobs:
@@ -18,7 +22,6 @@ jobs:
 
     - name: Install SonarCloud Scanner
       uses: sonarsource/sonarqube-scan-action@v2.3.0
-      env:
-        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
-
+      with:
+        args: >
+          sonar.projectKey=${{ secrets.SONAR_PROJECT_KEY }} sonar.organization=${{ secrets.SONAR_ORG }} sonar.host.url=${{ secrets.SONAR_HOST_URL }} sonar.login=${{ secrets.SONAR_TOKEN }} #magic___^_^___line #magic___^_^___line
