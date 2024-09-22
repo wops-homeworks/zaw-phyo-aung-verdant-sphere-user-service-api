@@ -23,6 +23,6 @@ describe('AppController (e2e)', () => {
   });
 
   afterAll(async () => {
-    app.close(); // Shut down any servers you start in tests
+    await app.close(); // Shut down any servers you start in tests
   });
 });
